@@ -5,7 +5,7 @@ use Illuminate\Http\Request;
 Route::group([
 
     'middleware' => 'api',
-    'namespace' => 'App\Http\Controllers',
+    // 'namespace' => 'App\Http\Controllers',
     'prefix' => 'auth'
 
 ], function ($router) {

@@ -16,7 +16,7 @@ class RecipeResource extends JsonResource
     {
         return [
         'id' => $this->id,
-        'user_id' => $this->user_id,
+        'user' => $this->user,
         'yummly_recipe_id' => $this->yummly_recipe_id,
         'recipe_name' => $this->recipe_name,
         'image_url' => $this->image_url,

@@ -21,7 +21,8 @@ class RecipeResource extends JsonResource
         'recipe_name' => $this->recipe_name,
         'image_url' => $this->image_url,
         'created_at' => (string) $this->created_at,
-        'updated_at' => (string) $this->updated_at
+        'updated_at' => (string) $this->updated_at,
+        
         ];
     }
 }

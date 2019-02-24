@@ -1,19 +1,13 @@
 <?php
 
-use App\Recipe;
-use App\Http\Resource\RecipeResource;
-
 namespace App\Http\Controllers;
 
+use App\Recipe;
+use App\Http\Resources\RecipeResource;
 use Illuminate\Http\Request;
 
 class RecipeController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('auth:api')->except(['index']);
-    }
-
     /**
      * Display a listing of the resource.
      *
@@ -21,7 +15,7 @@ class RecipeController extends Controller
      */
     public function index()
     {
-        return RecipeResource::collection(Recipe);
+        $this->middleware('auth:api')->except(['index', 'show']);
     }
 
     /**
@@ -47,9 +41,9 @@ class RecipeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Recipe $recipe)
+    public function show($id)
     {
-        return new RecipeResource($recipe);
+        //
     }
 
     /**
@@ -59,15 +53,9 @@ class RecipeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Recipe $recipe)
+    public function update(Request $request, $id)
     {
-        if ($request->user()->id !== $recipe->user_id) {
-            return response()->json(['error' => 'You can only edit your own recipes.'], 403);
-        }
-    
-        $recipe->update($request->only(['recipe_name', 'image_url', 'yummly_recipe_id']));
-    
-        return new RecipeResource($recipe);
+        //
     }
 
     /**
@@ -76,10 +64,8 @@ class RecipeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Recipe $Recipe)
+    public function destroy($id)
     {
-        $recipe->delete();
-        
-        return response()->json(null, 204);
+        //
     }
 }

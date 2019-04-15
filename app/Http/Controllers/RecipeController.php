@@ -26,13 +26,21 @@ class RecipeController extends Controller
      */
     public function store(Request $request)
     {
-        $recipe = Recipe::create([
+        $UserRecipes = Recipe::all()->where('user_id', '=', $request->user()->id)->
+        where('yummly_recipe_id', '==', $request->yummly_recipe_id)->isEmpty();
+
+        if ($UserRecipes) {
+            $recipe = Recipe::create([
             'user_id' => $request->user()->id,
             'yummly_recipe_id' => $request->yummly_recipe_id,
             'recipe_name' => $request->recipe_name,
             'image_url' => $request->image_url
         ]);
-        return new RecipeResource($recipe);
+            return new RecipeResource($recipe);
+        } else {
+            return response('Already exists', 500)
+            ->header('Content-Type', 'text/plain');
+        }
     }
 
     /**
@@ -64,9 +72,11 @@ class RecipeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
+        
         $recipe = Recipe::where('id', '=', $id);
         $recipe->delete();
+        return Recipe::all()->where('user_id', '=', $request->user()->id);
     }
 }

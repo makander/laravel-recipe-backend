@@ -13,9 +13,9 @@ class RecipeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $this->middleware('auth:api')->except(['index', 'show']);
+        return Recipe::all()->where('user_id', '=', $request->user()->id);
     }
 
     /**
@@ -66,6 +66,7 @@ class RecipeController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $recipe = Recipe::where('id', '=', $id);
+        $recipe->delete();
     }
 }

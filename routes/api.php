@@ -13,7 +13,7 @@ Route::group([
     Route::post('register', 'AuthController@register');
     Route::post('refresh', 'AuthController@refresh');
     Route::post('me', 'AuthController@me');
-    Route::apiResource('recipes', 'RecipeController');
+    Route::resource('recipes', 'RecipeController');
 });
 /*
 |--------------------------------------------------------------------------

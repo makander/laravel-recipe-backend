@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Recipe;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -58,7 +59,7 @@ class User extends Authenticatable implements JWTSubject
         $this->attributes['password'] = bcrypt($value);
     }
 
-    public function recipes()
+    public function recipe()
     {
         return $this->hasMany(Recipe::class);
     }

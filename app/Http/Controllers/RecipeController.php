@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\User;
 use App\Recipe;
-use App\Http\Resources\RecipeResource;
 use Illuminate\Http\Request;
 
 class RecipeController extends Controller
@@ -15,7 +15,18 @@ class RecipeController extends Controller
      */
     public function index(Request $request)
     {
-        return Recipe::all()->where('user_id', '=', $request->user()->id);
+        $recipes = Recipe::where('user_id', $request->user()->id)->get();
+        return response()->json($recipes);
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        //
     }
 
     /**
@@ -28,7 +39,6 @@ class RecipeController extends Controller
     {
         $UserRecipes = Recipe::all()->where('user_id', '=', $request->user()->id)->
         where('yummly_recipe_id', '==', $request->yummly_recipe_id)->isEmpty();
-
         if ($UserRecipes) {
             $recipe = Recipe::create([
             'user_id' => $request->user()->id,
@@ -36,20 +46,29 @@ class RecipeController extends Controller
             'recipe_name' => $request->recipe_name,
             'image_url' => $request->image_url
         ]);
-            return new RecipeResource($recipe);
         } else {
-            return response('Already exists', 500)
-            ->header('Content-Type', 'text/plain');
+            return response()->json(['error' => 'Recipe already exists'], 401);
         }
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Recipe  $recipe
      * @return \Illuminate\Http\Response
      */
     public function show($id)
+    {
+        //  return Recipe::all()->where('user_id', '=', $id);
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  \App\Recipe  $recipe
+     * @return \Illuminate\Http\Response
+     */
+    public function edit(Recipe $recipe)
     {
         //
     }
@@ -58,10 +77,10 @@ class RecipeController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \App\Recipe  $recipe
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Recipe $recipe)
     {
         //
     }
@@ -69,14 +88,14 @@ class RecipeController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  \App\Recipe  $recipe
      * @return \Illuminate\Http\Response
      */
     public function destroy(Request $request, $id)
     {
-        
         $recipe = Recipe::where('id', '=', $id);
         $recipe->delete();
-        return Recipe::all()->where('user_id', '=', $request->user()->id);
+        $recipes = Recipe::where('user_id', $request->user()->id)->get();
+        return response()->json($recipes);
     }
 }
